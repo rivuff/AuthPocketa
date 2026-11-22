@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: AuthPockta
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update #change it migrate for production
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 8640000
