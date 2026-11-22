@@ -3,7 +3,6 @@ package com.Authentication.AuthPocketa.service;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import javax.management.relation.Role;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,6 +32,8 @@ public class UserService implements UserDetailsService{
                             .authorities(mapRolesToAuthorities(user))
                             .build();
     }
+
+    
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(User user){
         return user.getRoles().stream()
