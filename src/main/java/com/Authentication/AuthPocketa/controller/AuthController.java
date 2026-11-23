@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import com.Authentication.AuthPocketa.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController 
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor 
 public class AuthController {
     
@@ -35,23 +36,29 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping ("/register")
+    @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody RegisterUserRequestDTO registerUserRequestDTO){
         User user = registerUserService.registerUser(registerUserRequestDTO.getUsername(), registerUserRequestDTO.getPassword());
         return ResponseEntity.ok(user);
     }
 
+    @GetMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginUserRequestDTO loginUserRequestDTO){
 
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginUserRequestDTO.getUsername(), loginUserRequestDTO.getPassword())
         );
 
+
+
         UserDetails userDetails = userService.loadUserByUsername(loginUserRequestDTO.getUsername());
 
         Set<Role> roles = userDetails.getAuthorities().stream().map(auth -> Role.valueOf(auth.getAuthority())).collect(Collectors.toSet());
 
         String token = jwtUtil.generateToken(loginUserRequestDTO.getUsername(), roles);
+
+        System.out.println("Token generated successfully");
+
 
         return ResponseEntity.ok(token);
     }

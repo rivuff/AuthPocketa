@@ -31,10 +31,10 @@ public class JwtAuthFilter extends OncePerRequestFilter{
             String jwt = null;
             String email = null;
 
-            if(authheader !=null && authheader.startsWith("bearer ")){
+            if(authheader !=null && authheader.startsWith("Bearer ")){
                 jwt = authheader.substring(7);
 
-                if(jwt == null && jwt.trim().isEmpty()){
+                if(jwt == null || jwt.trim().isEmpty()){
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().write("Invalid JWT token");
                     return;
@@ -76,10 +76,6 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 
                 
 
-            }else{
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Invalid JWT token");
-                return;
             }
 
             filterChain.doFilter(request, response);
